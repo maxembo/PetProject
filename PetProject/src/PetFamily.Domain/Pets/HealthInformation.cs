@@ -13,11 +13,8 @@ public record HealthInformation
     }
     
     public float Weight { get; }
-    
     public float Height { get; }
-    
     public  bool IsNeutered { get; }
-    
     public bool IsVaccinated { get; }
 
     public static Result<HealthInformation> Create(float weight, float height, bool isNeutered, bool isVaccinated)

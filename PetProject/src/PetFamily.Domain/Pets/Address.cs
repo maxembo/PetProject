@@ -4,7 +4,7 @@ namespace PetFamily.Domain.Pets;
 
 public record Address
 {
-    public Address(string country, string city, string street, string house)
+    private Address(string country, string city, string street, string house)
     {
         Country = country;
         City = city;

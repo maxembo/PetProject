@@ -2,34 +2,34 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Species;
 
-public class Species
+public sealed class Species : Entity<Guid>
 {
-    private readonly List<Breed> _breeds = [];
+    private readonly List<Breed> _breeds = new List<Breed>();
 
-    public Guid Id { get; private set; }
-
-    public string Title { get; private set; }
-
-    public IReadOnlyList<Breed> Breeds => _breeds;
+    //ef core 
+    private Species(Guid id) : base(id)
+    { }
     
-    public Species(Guid id, string title, List<Breed> breeds)
+    private Species(Guid id, string title) : base(id)
     {
-        Id = id;
         Title = title;
     }
 
-    public static Result<Species> Create(Guid id, string title, List<Breed> breed)
+    public string Title { get; private set; }
+    public IReadOnlyList<Breed> Breeds => _breeds;
+    
+    public static Result<Species> Create(Guid id, string title)
     {
-        var species = new Species(id, title, breed);
+        if(string.IsNullOrWhiteSpace(title) || title.Length > Constants.MaxLengthTitle)
+            return Result.Failure<Species>("Title must not be empty or longer than 500 characters!");
+        
+        var species = new Species(id, title);
 
         return Result.Success(species);
     }
 
     public Result AddBreed(Breed breed)
     {
-        if (_breeds is null)
-            return Result.Failure("Breeds list is empty");
-        
         if(_breeds.Contains(breed))
             return Result.Failure("Breed is already added");
         
@@ -40,10 +40,8 @@ public class Species
 
     public Result RemoveBreed(Breed breed)
     {
-        if(_breeds is null)
-            return Result.Failure("Breeds list is empty");
-        
-        _breeds.Remove(breed);
+        if(!_breeds.Remove(breed))
+            return Result.Failure("Breed not found");
         
         return Result.Success();
     }

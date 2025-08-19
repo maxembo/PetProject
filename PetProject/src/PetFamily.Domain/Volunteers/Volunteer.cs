@@ -3,34 +3,23 @@ using PetFamily.Domain.Pets;
 
 namespace PetFamily.Domain.Volunteers;
 
-public class Volunteer
+public sealed class Volunteer : Entity<Guid>
 {
     //ef core
-    private Volunteer()
-    {
-    }
+    private Volunteer(Guid id) : base(id)
+    { }
 
     private readonly List<Pet> _pets = new List<Pet>();
-
     private readonly List<SocialNetwork> _socialNetworks = new List<SocialNetwork>();
-
     private readonly List<Details> _details = new List<Details>();
 
-
     public IReadOnlyList<Pet> Pets => _pets.AsReadOnly();
-
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks.AsReadOnly();
-
     public IReadOnlyList<Details> Details => _details.AsReadOnly();
-
     public FullName FullName { get; private set; }
-
     public EmailAddress EmailAddress { get; private set; }
-
     public string Description { get; private set; }
-
     public int YearsOfExperience { get; private set; }
-
     public PhoneNumber PhoneNumber { get; private set; }
 
     private Volunteer(

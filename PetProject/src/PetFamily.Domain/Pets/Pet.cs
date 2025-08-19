@@ -3,13 +3,12 @@ using PetFamily.Domain.Species;
 
 namespace PetFamily.Domain.Pets;
 
-public class Pet : Entity
+public sealed class Pet : Entity<Guid>
 {
     //ef core
-    private Pet()
+    private Pet(Guid id) : base(id)
     { }
 
-    //TODO доделать богатую модель Pet
     private Pet(
         Guid id,
         string name,
@@ -21,11 +20,10 @@ public class Pet : Entity
         PhoneNumber phoneNumber,
         DateTime birthday,
         Details details,
-        DateTime createdAt)
+        DateTime createdAt) : base(id)
     {
-        Id = id;
         Name = name;
-        Species = speciesBreed;
+        SpeciesBreed = speciesBreed;
         Description = description;
         Color = color;
         HealthInformation = healthInformation;
@@ -36,33 +34,19 @@ public class Pet : Entity
         CreatedAt = createdAt;
     }
 
-    public Guid Id { get; private set; }
-
     public string Name { get; private set; }
-
-    public SpeciesBreed Species { get; private set; }
-
+    public SpeciesBreed SpeciesBreed { get; private set; }
     public string Description { get; private set; }
-
-    public string Breed { get; private set; }
-
     public string Color { get; private set; }
-
     public HealthInformation HealthInformation { get; private set; }
-
     public Address Address { get; private set; }
-
     public PhoneNumber PhoneNumber { get; private set; }
-
     public DateTime Birthday { get; private set; }
-
     public StatusHelp StatusHelp { get; private set; } = StatusHelp.NeedsHelp;
-
     public Details Details { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public DateTime CreatedAt { get; private set; }
-
-    private static Result<Pet> Create(
+    public static Result<Pet> Create(
         Guid id,
         string name,
         SpeciesBreed speciesBreed,
@@ -75,8 +59,6 @@ public class Pet : Entity
         Details details,
         DateTime createdAt)
     {
-        id = Guid.NewGuid();
-
         if (string.IsNullOrWhiteSpace(name) || name.Length > Constants.MaxLengthTitle)
             return Result.Failure<Pet>("Title must not be empty or longer than 500 characters!");
 

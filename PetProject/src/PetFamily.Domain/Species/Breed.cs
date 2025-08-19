@@ -2,20 +2,18 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Species;
 
-public class Breed
+public sealed class Breed : Entity<Guid>
 {
     // ef core
-    private Breed() 
+    private Breed(Guid id) : base(id) 
     { }
 
-    private Breed(Guid id, string title)
+    private Breed(Guid id, string title) : base(id)
     {
         Id = id;
         Title = title;
     }
     
-    public Guid Id { get; private set; }
-
     public string Title { get; private set; }
 
     public static Result<Breed> Create(Guid id, string title)

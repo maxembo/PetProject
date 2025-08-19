@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Species;
 
-public class SpeciesBreed
+public record SpeciesBreed
 {
     private SpeciesBreed(Guid speciesId, Guid breedId)
     {
@@ -17,10 +17,10 @@ public class SpeciesBreed
     public static Result<SpeciesBreed> Create(Guid speciesId, Guid breedId)
     {
         if (speciesId == Guid.Empty)
-            Result.Failure<SpeciesBreed>("Species breed cannot be empty.");
+            Result.Failure<SpeciesBreed>("SpeciesId breed cannot be empty.");
         
         if(breedId == Guid.Empty)
-            Result.Failure<SpeciesBreed>("Breed cannot be empty.");
+            Result.Failure<SpeciesBreed>("BreedId cannot be empty.");
 
         var speciesBreed = new SpeciesBreed(speciesId, breedId);
         

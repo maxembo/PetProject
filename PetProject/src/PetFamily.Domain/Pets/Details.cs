@@ -11,7 +11,6 @@ public record Details
     }
 
     public string Title { get; }
-
     public string Description { get; }
 
     public static Result<Details> Create(string title, string description)
